@@ -3,12 +3,17 @@ AccelerometerTCP
 
 Android Accelerometer Raspberrypi GPIO Control
 
+
 Using
 
 Android with Accelerometer
+
 Android Developer Tool
+
 Raspberrypi
+
 DC Motor
+
 
 Useful Link
 
