@@ -23,7 +23,9 @@ import java.net.Socket;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -40,6 +42,7 @@ import android.view.Display;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.EditText;
 
 /**
  * This is an example of using the accelerometer to integrate the device's
@@ -64,7 +67,7 @@ public class AccelerometerPlayActivity extends Activity {
 
 
 	private Socket socket;
-	private String server = "192.168.0.14";
+	private String server = "192.168.0.15";
 	private int port = 8888;
 	private OutputStream outs;
 	private Thread rcvThread;
@@ -142,7 +145,8 @@ public class AccelerometerPlayActivity extends Activity {
 		// TODO Auto-generated method stub
     	switch(item.getItemId()){
     	case ID_CON:
-    		connectingServer();
+    		setText();
+    		//connectingServer();
     		break;
     	case ID_DISCON:
     		disconnectingServer();
@@ -152,8 +156,34 @@ public class AccelerometerPlayActivity extends Activity {
 		return true;
 	}
 
+    public void setText(){
+
+        AlertDialog.Builder alert = new AlertDialog.Builder(AccelerometerPlayActivity.this);
+        final EditText input = new EditText(AccelerometerPlayActivity.this);
+        alert.setView(input);
+        alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //input.setText("canceled");
+            }
+        });
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                String toSend = input.getText().toString();
+                if ( toSend.length() > 8) server = toSend;
+                System.out.println("Server:"+toSend);
+            	
+        		connectingServer();
+
+            }
+        });
+        alert.show();
+    }
     void connectingServer(){
-		try{
+        try{
 			if(socket!=null)
 			{
 				socket.close();
@@ -166,7 +196,9 @@ public class AccelerometerPlayActivity extends Activity {
 			rcvThread = new Thread(new rcvthread(socket));
 		    rcvThread.start();
 			//logger.log("Connected");
+		    System.out.println("Connected");
 		} catch (IOException e){
+		    System.out.println("Fail to connect");
 			//logger.log("Fail to connect");
 			e.printStackTrace();
 		}
@@ -180,8 +212,10 @@ public class AccelerometerPlayActivity extends Activity {
 				socket.close();
 				socket = null;
 				//logger.log("Closed!");
+			    System.out.println("Closed");
 				rcvThread = null;
 			} catch (IOException e){
+			    System.out.println("Fail to close");
 				//logger.log("Fail to close");
 				e.printStackTrace();
 			}
@@ -193,6 +227,7 @@ public class AccelerometerPlayActivity extends Activity {
     		outs.write(sndOpkey.getBytes("UTF-8"));
     		outs.flush();
     	} catch (IOException e) {
+		    System.out.println("Fail to send");
 			//logger.log("Fail to send");
 			e.printStackTrace();
     	}
@@ -531,6 +566,7 @@ public class AccelerometerPlayActivity extends Activity {
             /*
              * Send Communication Data
              */
+			//System.out.println("sx:"+sx+", sy:"+sy);
             String sndOpkey = "CMD";
             if (sy<-0.30) sndOpkey = "LeftTurn";
             else if (sy>0.30) sndOpkey = "RightTurn";
@@ -539,7 +575,7 @@ public class AccelerometerPlayActivity extends Activity {
             //else if (sx<=0.30 && sx>=-0.30 && sy<=0.30 && sy>=-0.30) sndOpkey = "Stop";
             else sndOpkey = "Stop";
             
-            System.out.println(sndOpkey);
+            //System.out.println(sndOpkey);
             
 			if(socket!=null){
 				try{
