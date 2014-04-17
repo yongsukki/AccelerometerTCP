@@ -133,7 +133,7 @@ public class AccelerometerPlayActivity extends Activity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
          
-        // 아이콘 설정
+        // �븘�씠肄� �꽕�젙
         menu.add(0, ID_CON, Menu.NONE, "Connect").setTitle("Connect");
         menu.add(0, ID_DISCON, Menu.NONE, "Disconnect").setTitle("Disconnect");
          
@@ -163,14 +163,12 @@ public class AccelerometerPlayActivity extends Activity {
         alert.setView(input);
         alert.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 
-            @Override
             public void onClick(DialogInterface dialog, int which) {
                 //input.setText("canceled");
             }
         });
         alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
 
-            @Override
             public void onClick(DialogInterface dialog, int which) {
                 String toSend = input.getText().toString();
                 if ( toSend.length() > 8) server = toSend;
@@ -290,7 +288,7 @@ public class AccelerometerPlayActivity extends Activity {
                 final float gy = -sy * m;
 
                 /*
-                 * �F = mA <=> A = �F / m We could simplify the code by
+                 * 占폝 = mA <=> A = 占폝 / m We could simplify the code by
                  * completely eliminating "m" (the mass) from all the equations,
                  * but it would hide the concepts from this sample code.
                  */
@@ -300,12 +298,12 @@ public class AccelerometerPlayActivity extends Activity {
 
                 /*
                  * Time-corrected Verlet integration The position Verlet
-                 * integrator is defined as x(t+�t) = x(t) + x(t) - x(t-�t) +
-                 * a(t)�t�2 However, the above equation doesn't handle variable
-                 * �t very well, a time-corrected version is needed: x(t+�t) =
-                 * x(t) + (x(t) - x(t-�t)) * (�t/�t_prev) + a(t)�t�2 We also add
-                 * a simple friction term (f) to the equation: x(t+�t) = x(t) +
-                 * (1-f) * (x(t) - x(t-�t)) * (�t/�t_prev) + a(t)�t�2
+                 * integrator is defined as x(t+占퐐) = x(t) + x(t) - x(t-占퐐) +
+                 * a(t)占퐐占�2 However, the above equation doesn't handle variable
+                 * 占퐐 very well, a time-corrected version is needed: x(t+占퐐) =
+                 * x(t) + (x(t) - x(t-占퐐)) * (占퐐/占퐐_prev) + a(t)占퐐占�2 We also add
+                 * a simple friction term (f) to the equation: x(t+占퐐) = x(t) +
+                 * (1-f) * (x(t) - x(t-占퐐)) * (占퐐/占퐐_prev) + a(t)占퐐占�2
                  */
                 final float dTdT = dT * dT;
                 final float x = mPosX + mOneMinusFriction * dTC * (mPosX - mLastPosX) + mAccelX
@@ -499,7 +497,6 @@ public class AccelerometerPlayActivity extends Activity {
             mVerticalBound = ((h / mMetersToPixelsY - sBallDiameter) * 0.5f);
         }
 
-        @Override
         public void onSensorChanged(SensorEvent event) {
             if (event.sensor.getType() != Sensor.TYPE_ACCELEROMETER)
                 return;
@@ -603,7 +600,6 @@ public class AccelerometerPlayActivity extends Activity {
             invalidate();
         }
 
-        @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
         }
     }
